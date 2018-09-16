@@ -1,0 +1,7 @@
+{
+  "generator-h5package": {
+    "projectName": "coram",
+    "projectDesc": "d3 visualisation of flow of children through Kent child services",
+    "projectLicense": "Apache-2.0"
+  }
+}

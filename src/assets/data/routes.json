@@ -1,0 +1,47 @@
+[
+  {
+    "start": "earlyHelp",
+    "end": "initialContact",
+    "color": "#01AF51"
+  },
+  {
+    "start": "initialContact",
+    "end": "referral",
+    "color": "#000000"
+  },
+  {
+    "start": "referral",
+    "end": "strategyDiscussion",
+    "color": "#000000"
+  },
+  {
+    "start": "referral",
+    "end": "cf",
+    "color": "#000000"
+  },
+  {
+    "start": "strategyDiscussion",
+    "end": "cf",
+    "color": "#000000"
+  },
+  {
+    "start": "cf",
+    "end": "strategyDiscussion",
+    "color": "#558ED5"
+  },
+  {
+    "start": "strategyDiscussion",
+    "end": "section47",
+    "color": "#000000"
+  },
+  {
+    "start": "section47",
+    "end": "cf",
+    "color": "#558ED5"
+  },
+  {
+    "start": "section47",
+    "end": "icpc",
+    "color": "#558ED5"
+  }
+]
