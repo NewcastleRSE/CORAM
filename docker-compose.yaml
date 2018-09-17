@@ -1,0 +1,13 @@
+version: "3"
+services:
+  client:
+    image: coram:${TAG}
+    build:
+      context: .
+      dockerfile: ./docker/production/Dockerfile
+    ports:
+    - "80:80"
+    networks:
+    - public
+networks:
+  public:

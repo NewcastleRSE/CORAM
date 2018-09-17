@@ -1,0 +1,19 @@
+version: "3"
+services:
+  client:
+    image: coram:latest
+    build:
+      context: .
+      dockerfile: ./docker/development/Dockerfile
+    volumes:
+    - "./src:/usr/local/app/src"
+    - "node_modules:/usr/local/app/node_modules"
+    ports:
+    - "9000:9000"
+    networks:
+    - public
+networks:
+  public:
+
+volumes:
+  node_modules:
