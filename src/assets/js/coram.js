@@ -41,6 +41,10 @@ async function positionNodes(grid) {
     const routeData = await d3.json('/assets/data/routes.json');
     const nodeData = await d3.json('/assets/data/nodes.json');
 
+    /*
+    * This section creates the lines of case flow that link all the nodes on the system
+     */
+
     let routeGroup = svg.append('g');
     routeGroup.attr('id', 'routes');
 
@@ -50,13 +54,99 @@ async function positionNodes(grid) {
         .append('g')
         .attr('class', 'route');
 
-    let line = routes.append('line')
-        .attr('x1', function(d){ return (_.find(nodeData, { 'id': d.start }).col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2); })
-        .attr('y1', function(d){ return (_.find(nodeData, { 'id': d.start }).row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2); })
-        .attr('x2', function(d){ return (_.find(nodeData, { 'id': d.end }).col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2); })
-        .attr('y2', function(d){ return (_.find(nodeData, { 'id': d.end }).row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2); })
+    let route = routes.append('path')
+        .attr('d', function (d,i) {
+
+            let start = _.find(nodeData, { 'id': d.start }),
+                end = _.find(nodeData, { 'id': d.end });
+
+            let startPoint = {
+                    x: (start.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2),
+                    y: (start.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2)
+                },
+                endPoint = {
+                    x: (end.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2),
+                    y: (end.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2)
+                };
+
+            let path = 'M' + startPoint.x + ',' + startPoint.y;
+
+            if(d.hasOwnProperty('bend')){
+
+                //calculate full length of line and add mid-point at point d.bend.x
+                //invert changes the direction of the line by altering the mid-point y location
+                let midPoint = {
+                    x: startPoint.x + ((endPoint.x - startPoint.x) * d.bend.x),
+                    y: d.bend.invert ? startPoint.y : endPoint.y
+                };
+
+                let curveStart,
+                    curveEnd;
+
+                if(d.bend.invert){
+                    curveStart = {
+                        x: midPoint.x - (defaults.scaleFactor / 2),
+                        y: midPoint.y
+                    };
+
+                    curveEnd = {
+                        x: midPoint.x + (defaults.scaleFactor / 2),
+                        y: midPoint.y + (defaults.scaleFactor / 2)
+                    };
+                }
+                else {
+
+                    if(startPoint.y > endPoint.y){
+                        curveStart = {
+                            x: midPoint.x - (defaults.scaleFactor / 2),
+                            y: midPoint.y + (defaults.scaleFactor / 2)
+                        };
+
+                        curveEnd = {
+                            x: midPoint.x + (defaults.scaleFactor / 2),
+                            y: midPoint.y
+                        };
+                    }
+                    else {
+                        curveStart = {
+                            x: midPoint.x - (defaults.scaleFactor / 2),
+                            y: midPoint.y - (defaults.scaleFactor / 2)
+                        };
+
+                        curveEnd = {
+                            x: midPoint.x + (defaults.scaleFactor / 2),
+                            y: midPoint.y
+                        };
+                    }
+                }
+
+                let theta = Math.atan2(curveEnd.y - curveStart.y, curveEnd.x - curveStart.x) - Math.PI / 2;
+
+                //Seems to work best when set at 0;
+                let offset = 0;
+
+                let controlPoint = {
+                    x: midPoint.x + offset * Math.cos(theta),
+                    y: midPoint.y + offset * Math.sin(theta)
+                };
+
+                path += 'L' + curveStart.x + ',' + curveStart.y;
+                path += 'Q' + controlPoint.x + ',' + controlPoint.y + ',' + curveEnd.x + ',' + curveEnd.y;
+            }
+
+            path += 'L' + endPoint.x + ',' + endPoint.y;
+
+            return path;
+        })
         .style('stroke', function(d) { return d.color; })
+        .style('stroke-dasharray', function(d) { if (d.universal) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); } })
+        .style('fill', 'none')
         .style('stroke-width', function() { return defaults.scaleFactor / 5 });
+
+    /*
+    * This section creates the nodes, represented by large dots, that a case can stop at
+     */
+
 
     let nodeGroup = svg.append('g');
     nodeGroup.attr('id', 'nodes');
@@ -74,6 +164,7 @@ async function positionNodes(grid) {
         .attr('r', defaults.scaleFactor)
         .style('fill', 'white')
         .style('stroke', function(d) { return d.color; })
+        .style('stroke-dasharray', function(d) { if (d.universal) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); } })
         .style('stroke-width', function() { return defaults.scaleFactor / 5 });
 
     let label = nodes.append('text')

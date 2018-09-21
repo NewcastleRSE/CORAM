@@ -1,58 +1,74 @@
 [
   {
+    "id": "universalSupport",
+    "name": "Universal Support",
+    "color": "#CCA246",
+    "col": 0,
+    "row": 0,
+    "universal": true
+  },
+  {
     "id": "earlyHelp",
     "name": "Early Help",
     "color": "#01AF51",
     "col": 0,
-    "row": 1
+    "row": 1,
+    "universal": false
   },
   {
     "id": "initialContact",
     "name": "Initial Contact",
     "color": "#000000",
     "col": 1,
-    "row": 1
+    "row": 1,
+    "universal": false
   },
   {
     "id": "referral",
     "name": "Referral",
     "color": "#000000",
     "col": 2,
-    "row": 1
+    "row": 1,
+    "universal": false
   },
   {
     "id": "strategyDiscussion",
     "name": "Strategy Discussion",
     "color": "#000000",
     "col": 3,
-    "row": 2
+    "row": 2,
+    "universal": false
   },
   {
     "id": "cf",
     "name": "C & F",
     "color": "#558ED5",
     "col": 4,
-    "row": 0
+    "row": 0,
+    "universal": false
   },
   {
     "id": "section47",
     "name": "Section 47",
     "color": "#558ED5",
     "col": 4,
-    "row": 2
+    "row": 2,
+    "universal": false
   },
   {
     "id": "icpc",
     "name": "ICPC",
     "color": "#558ED5",
     "col": 5,
-    "row": 2
+    "row": 2,
+    "universal": false
   },
   {
     "id": "closure",
     "name": "Closure",
     "color": "#558ED5",
     "col": 6,
-    "row": 3
+    "row": 3,
+    "universal": false
   }
 ]

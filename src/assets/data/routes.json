@@ -1,47 +1,74 @@
 [
   {
+    "start": "universalSupport",
+    "end": "initialContact",
+    "color": "#CCA246",
+    "universal": true,
+    "bend": {
+      "x": 0.5,
+      "invert": true
+    }
+  },
+  {
     "start": "earlyHelp",
     "end": "initialContact",
-    "color": "#01AF51"
+    "color": "#01AF51",
+    "universal": false
   },
   {
     "start": "initialContact",
     "end": "referral",
-    "color": "#000000"
+    "color": "#000000",
+    "universal": false
   },
   {
     "start": "referral",
     "end": "strategyDiscussion",
-    "color": "#000000"
+    "color": "#000000",
+    "universal": false,
+    "bend": {
+      "x": 0.5,
+      "invert": false
+    }
   },
   {
     "start": "referral",
     "end": "cf",
-    "color": "#000000"
+    "color": "#000000",
+    "universal": false,
+    "bend": {
+      "x": 0.25,
+      "invert": false
+    }
   },
   {
     "start": "strategyDiscussion",
     "end": "cf",
-    "color": "#000000"
+    "color": "#000000",
+    "universal": false
   },
   {
     "start": "cf",
     "end": "strategyDiscussion",
-    "color": "#558ED5"
+    "color": "#558ED5",
+    "universal": false
   },
   {
     "start": "strategyDiscussion",
     "end": "section47",
-    "color": "#000000"
+    "color": "#000000",
+    "universal": false
   },
   {
     "start": "section47",
     "end": "cf",
-    "color": "#558ED5"
+    "color": "#558ED5",
+    "universal": false
   },
   {
     "start": "section47",
     "end": "icpc",
-    "color": "#558ED5"
+    "color": "#558ED5",
+    "universal": false
   }
 ]
