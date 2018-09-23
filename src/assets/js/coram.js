@@ -45,6 +45,22 @@ export default function Coram() {
     positionNodes(grid);
 }
 
+function insertLinebreaks(d) {
+
+    console.log(d);
+
+    let el = d3.select(this);
+    let words = d.name.split(' ');
+    el.text('');
+
+    for (let i = 0; i < words.length; i++) {
+        let tspan = el.append('tspan').text(words[i]);
+        tspan.attr('text-anchor', 'middle');
+        if (i > 0)
+            tspan.attr('dy', defaults.scaleFactor / 2);
+    }
+}
+
 async function positionNodes(grid) {
 
     const routeData = await d3.json('/assets/data/routes.json');
@@ -221,22 +237,67 @@ async function positionNodes(grid) {
                 .enter().append('line')
                 .attr('x1', function(d){ return (node.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) })
                 .attr('y1', function(d){ return (node.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) })
-                .attr('x2', function(d, i){ return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2) })
-                .attr('y2', function(d, i){ return ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) })
+                .attr('x2', function(d, i){
+                    if(node.id === 'referral'){
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                    }
+                    else if(node.id === 'cf'){
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                    }
+                    else {
+                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2);
+                    }
+                })
+                .attr('y2', function(d, i) {
+
+                    if (node.id === 'referral') {
+                        return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
+                    }
+                    else if (node.id === 'cf') {
+                        return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
+                    }
+                    else {
+                        return ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+                    }
+                })
                 .attr('marker-end', 'url(#arrow)')
                 .style('stroke', function(d) { return d.color; })
                 .style('stroke-dasharray', function(d) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); })
                 .style('stroke-width', function() { return defaults.scaleFactor / 5 });
-        })
-        .each(function(node, i){
+
             d3.select(this).selectAll('text')
                 .data(node.exits)
                 .enter().append('text')
                 .text(function(d) { return d.name })
                 .attr('text-anchor', 'middle')
                 .attr('font-size', function() { return defaults.scaleFactor / 2.5 })
-                .attr('dx', function(d, i){ return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2) })
-                .attr('dy', function(d){ return ((node.row + 2) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) });
+                .attr('dx', function(d, i){
+
+                    if(node.id === 'referral'){
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                    }
+                    else if(node.id === 'cf'){
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                    }
+                    else {
+                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2)
+                    }
+                })
+                .attr('dy', function(d, i){
+
+                    if (node.id === 'referral') {
+                        return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
+                    }
+                    else if (node.id === 'cf') {
+                        return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
+                    }
+                    else {
+                        return ((node.row + 2) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+                    }
+
+
+
+                });
         });
 
     /*
@@ -265,7 +326,10 @@ async function positionNodes(grid) {
     let label = nodes.append('text')
         .text(function(d) { return d.name })
         .attr('text-anchor', 'middle')
-        .attr('font-size', function() { return defaults.scaleFactor / 2.5 })
+        .attr('font-size', function() { return defaults.scaleFactor / 2 })
+        .attr('font-weight', 'bold')
         .attr('dx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) })
-        .attr('dy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor * 2.5) });
+        .attr('dy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor * 2.2) });
+
+    //nodeGroup.selectAll('g.node text').each(insertLinebreaks)
 }
