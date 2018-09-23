@@ -211,6 +211,10 @@ async function positionNodes(grid) {
 
             path += 'L' + endPoint.x + ',' + endPoint.y;
 
+            if(i===0){
+                console.log(path);
+            }
+
             return path;
         })
         .style('stroke', function(d) { return d.color; })
@@ -224,6 +228,9 @@ async function positionNodes(grid) {
 
     let exitGroup = svg.append('g');
     exitGroup.attr('id', 'exits');
+
+    let closeNode = _.find(nodeData, {id: 'closure'});
+    console.log(closeNode);
 
     let exits = exitGroup.selectAll('.exits')
         .data(nodeData)
@@ -263,7 +270,34 @@ async function positionNodes(grid) {
                 .attr('marker-end', 'url(#arrow)')
                 .style('stroke', function(d) { return d.color; })
                 .style('stroke-dasharray', function(d) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); })
-                .style('stroke-width', function() { return defaults.scaleFactor / 5 });
+                .style('stroke-width', function() { return defaults.scaleFactor / 5 })
+                .each(function(exit){
+                    if(exit.name === 'NFA'){
+                        d3.select('#' + node.id + '-exits').append('path')
+                            .attr('d', function(d, i){
+
+                                let path = 'M';
+
+                                if(node.id === 'cf'){
+                                    path += (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2)) + (defaults.scaleFactor / 2) +
+                                    ',' + ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
+                                }
+                                else {
+                                    path += (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2) +
+                                        ',' + ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+                                }
+
+                                path += 'L' + (closeNode.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) +
+                                    ',' + (closeNode.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+
+                                console.log(path);
+                                return path;
+                            })
+                            .style('stroke', function(d) { return closeNode.color; })
+                            .style('stroke-dasharray', function() { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); })
+                            .style('stroke-width', function() { return defaults.scaleFactor / 5 })
+                    }
+                });
 
             d3.select(this).selectAll('text')
                 .data(node.exits)
@@ -299,6 +333,13 @@ async function positionNodes(grid) {
 
                 });
         });
+
+    /*
+    * This section creates the layer for the individual cases
+     */
+
+    let caseGroup = svg.append('g');
+    caseGroup.attr('id', 'cases');
 
     /*
     * This section creates the nodes, represented by large dots, that a case can stop at
