@@ -5,7 +5,8 @@
     "color": "#CCA246",
     "col": 0,
     "row": 2,
-    "universal": true
+    "universal": true,
+    "exits": []
   },
   {
     "id": "earlyHelp",
@@ -13,7 +14,17 @@
     "color": "#01AF51",
     "col": 0,
     "row": 4,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "Universal",
+        "color": "#CCA246"
+      },
+      {
+        "name": "Targeted",
+        "color": "#01AF51"
+      }
+    ]
   },
   {
     "id": "initialContact",
@@ -21,7 +32,21 @@
     "color": "#000000",
     "col": 2,
     "row": 4,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "NFA/IAG",
+        "color": "#CCA246"
+      },
+      {
+        "name": "EH",
+        "color": "#01AF51"
+      },
+      {
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "referral",
@@ -29,7 +54,21 @@
     "color": "#000000",
     "col": 4,
     "row": 4,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "CP from OLA",
+        "color": "#EB3323"
+      },
+      {
+        "name": "LAC",
+        "color": "#000000"
+      },
+      {
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "strategyDiscussion",
@@ -37,7 +76,17 @@
     "color": "#000000",
     "col": 6,
     "row": 6,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "cf",
@@ -45,7 +94,25 @@
     "color": "#558ED5",
     "col": 8,
     "row": 2,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "EH",
+        "color": "#01AF51"
+      },
+      {
+        "name": "CIN",
+        "color": "#F19FCA"
+      },
+      {
+        "name": "Other",
+        "color": "#FCF452"
+      },
+      {
+        "name": "NFA",
+        "color": "#CCA246"
+      }
+    ]
   },
   {
     "id": "section47",
@@ -53,7 +120,21 @@
     "color": "#558ED5",
     "col": 8,
     "row": 6,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "name": "CIN",
+        "color": "#F19FCA"
+      },
+      {
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "icpc",
@@ -61,14 +142,29 @@
     "color": "#558ED5",
     "col": 10,
     "row": 6,
-    "universal": false
+    "universal": false,
+    "exits": [
+      {
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "name": "CIN",
+        "color": "#F19FCA"
+      },
+      {
+        "name": "CP",
+        "color": "#EB3323"
+      }
+    ]
   },
   {
     "id": "closure",
     "name": "Closure",
     "color": "#558ED5",
     "col": 12,
-    "row": 8,
-    "universal": false
+    "row": 9,
+    "universal": false,
+    "exits": []
   }
 ]

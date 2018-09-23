@@ -15,14 +15,13 @@ export default function Coram() {
     orientation = stage.getBoundingClientRect().width > stage.getBoundingClientRect().height ? 'landscape' : 'portrait';
 
     defaults = {
-        padding: 25,
         width: stage.getBoundingClientRect().width,
         height: stage.getBoundingClientRect().height,
-        scaleFactor: Math.floor(stage.getBoundingClientRect().height / 25)
+        scaleFactor: Math.floor(stage.getBoundingClientRect().height / 35)
     };
 
     if(orientation === 'portrait'){
-        defaults.scaleFactor = Math.floor(stage.getBoundingClientRect().width / 25)
+        defaults.scaleFactor = Math.floor(stage.getBoundingClientRect().width / 35)
     }
 
     let grid = {
@@ -32,6 +31,16 @@ export default function Coram() {
 
     svg.attr('width', defaults.width);
     svg.attr('height', defaults.height);
+
+    svg.append('svg:defs').append('svg:marker')
+        .attr('id', 'arrow')
+        .attr('viewBox', '0 -15 30 30')
+        .attr('refX', 5)//so that it comes towards the center.
+        .attr('markerWidth', 5)
+        .attr('markerHeight', 5)
+        .attr('orient', 'auto')
+        .append('svg:path')
+        .attr('d', 'M0,-5L10,0L0,5');
 
     positionNodes(grid);
 }
@@ -194,9 +203,45 @@ async function positionNodes(grid) {
         .style('stroke-width', function() { return defaults.scaleFactor / 5 });
 
     /*
-    * This section creates the nodes, represented by large dots, that a case can stop at
+    * This section creates the node exit routes
      */
 
+    let exitGroup = svg.append('g');
+    exitGroup.attr('id', 'exits');
+
+    let exits = exitGroup.selectAll('.exits')
+        .data(nodeData)
+        .enter()
+        .append('g')
+        .attr('id', function(d){ return d.id + '-exits'; })
+        .attr('class', 'exits')
+        .each(function(node){
+            d3.select(this).selectAll('line')
+                .data(node.exits)
+                .enter().append('line')
+                .attr('x1', function(d){ return (node.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) })
+                .attr('y1', function(d){ return (node.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) })
+                .attr('x2', function(d, i){ return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2) })
+                .attr('y2', function(d, i){ return ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) })
+                .attr('marker-end', 'url(#arrow)')
+                .style('stroke', function(d) { return d.color; })
+                .style('stroke-dasharray', function(d) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); })
+                .style('stroke-width', function() { return defaults.scaleFactor / 5 });
+        })
+        .each(function(node, i){
+            d3.select(this).selectAll('text')
+                .data(node.exits)
+                .enter().append('text')
+                .text(function(d) { return d.name })
+                .attr('text-anchor', 'middle')
+                .attr('font-size', function() { return defaults.scaleFactor / 2.5 })
+                .attr('dx', function(d, i){ return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2) })
+                .attr('dy', function(d){ return ((node.row + 2) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) });
+        });
+
+    /*
+    * This section creates the nodes, represented by large dots, that a case can stop at
+     */
 
     let nodeGroup = svg.append('g');
     nodeGroup.attr('id', 'nodes');
