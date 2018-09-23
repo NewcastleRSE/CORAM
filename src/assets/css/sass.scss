@@ -5,6 +5,15 @@ html, body {
   width: 100%;
 }
 
+#route-map {
+  height: calc(100% - 100px);
+  width: calc(100% - 100px);
+}
+
+body {
+  margin: 50px;
+}
+
 svg {
   .node {
     z-index: 10;

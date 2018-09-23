@@ -2,72 +2,88 @@
   {
     "start": "universalSupport",
     "end": "initialContact",
+    "junction": {
+      "row": 2,
+      "distance": 0.5
+    },
     "color": "#CCA246",
-    "universal": true,
-    "bend": {
-      "x": 0.5,
-      "invert": true
-    }
+    "universal": true
   },
   {
     "start": "earlyHelp",
     "end": "initialContact",
+    "junction": null,
     "color": "#01AF51",
     "universal": false
   },
   {
     "start": "initialContact",
     "end": "referral",
+    "junction": null,
     "color": "#000000",
     "universal": false
   },
   {
     "start": "referral",
     "end": "strategyDiscussion",
+    "junction": {
+      "row": 6,
+      "distance": 0.5
+    },
     "color": "#000000",
-    "universal": false,
-    "bend": {
-      "x": 0.5,
-      "invert": false
-    }
+    "universal": false
   },
   {
     "start": "referral",
     "end": "cf",
+    "junction": {
+      "row": 2,
+      "distance": 0.25
+    },
     "color": "#000000",
-    "universal": false,
-    "bend": {
-      "x": 0.25,
-      "invert": false
-    }
+    "universal": false
   },
   {
     "start": "strategyDiscussion",
     "end": "cf",
+    "junction": {
+      "row": 2,
+      "distance": 0.75
+    },
     "color": "#000000",
     "universal": false
   },
   {
     "start": "cf",
     "end": "strategyDiscussion",
+    "junction": {
+      "row": 6,
+      "distance": 0.75
+    },
     "color": "#558ED5",
     "universal": false
   },
   {
     "start": "strategyDiscussion",
     "end": "section47",
+    "junction": null,
     "color": "#000000",
     "universal": false
   },
   {
     "start": "section47",
     "end": "cf",
+    "junction": {
+      "row": 3,
+      "distance": 0.5
+    },
     "color": "#558ED5",
     "universal": false
   },
   {
     "start": "section47",
     "end": "icpc",
+    "junction": null,
     "color": "#558ED5",
     "universal": false
   }

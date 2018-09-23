@@ -10,8 +10,8 @@ let svg,
 
 export default function Coram() {
 
-    svg = d3.select('body').append('svg');
-    stage = d3.select('body').node();
+    svg = d3.select('#route-map').append('svg');
+    stage = d3.select('#route-map').node();
     orientation = stage.getBoundingClientRect().width > stage.getBoundingClientRect().height ? 'landscape' : 'portrait';
 
     defaults = {
@@ -26,8 +26,8 @@ export default function Coram() {
     }
 
     let grid = {
-        columnWidth: Math.floor(defaults.width / 7),
-        rowHeight: Math.floor(defaults.height / 4),
+        columnWidth: Math.floor(defaults.width / 13),
+        rowHeight: Math.floor(defaults.height / 10),
     };
 
     svg.attr('width', defaults.width);
@@ -71,19 +71,27 @@ async function positionNodes(grid) {
 
             let path = 'M' + startPoint.x + ',' + startPoint.y;
 
-            if(d.hasOwnProperty('bend')){
+
+
+            if(d.junction){
 
                 //calculate full length of line and add mid-point at point d.bend.x
                 //invert changes the direction of the line by altering the mid-point y location
+                // let midPoint = {
+                //     x: startPoint.x + ((endPoint.x - startPoint.x) * (start.col/end.col)),
+                //     y: (start.row < end.row && start.col < end.col) ? startPoint.y : endPoint.y
+                // };
+
                 let midPoint = {
-                    x: startPoint.x + ((endPoint.x - startPoint.x) * d.bend.x),
-                    y: d.bend.invert ? startPoint.y : endPoint.y
+                    x: startPoint.x + ((endPoint.x - startPoint.x) * d.junction.distance),
+                    y: (d.junction.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2)
                 };
 
                 let curveStart,
                     curveEnd;
 
-                if(d.bend.invert){
+                //Line heading SE
+                if(start.row === d.junction.row){
                     curveStart = {
                         x: midPoint.x - (defaults.scaleFactor / 2),
                         y: midPoint.y
@@ -95,29 +103,15 @@ async function positionNodes(grid) {
                     };
                 }
                 else {
+                    curveStart = {
+                        x: midPoint.x - (defaults.scaleFactor / 2),
+                        y: (startPoint.y > endPoint.y) ? midPoint.y + (defaults.scaleFactor / 2) : midPoint.y - (defaults.scaleFactor / 2)
+                    };
 
-                    if(startPoint.y > endPoint.y){
-                        curveStart = {
-                            x: midPoint.x - (defaults.scaleFactor / 2),
-                            y: midPoint.y + (defaults.scaleFactor / 2)
-                        };
-
-                        curveEnd = {
-                            x: midPoint.x + (defaults.scaleFactor / 2),
-                            y: midPoint.y
-                        };
-                    }
-                    else {
-                        curveStart = {
-                            x: midPoint.x - (defaults.scaleFactor / 2),
-                            y: midPoint.y - (defaults.scaleFactor / 2)
-                        };
-
-                        curveEnd = {
-                            x: midPoint.x + (defaults.scaleFactor / 2),
-                            y: midPoint.y
-                        };
-                    }
+                    curveEnd = {
+                        x: midPoint.x + (defaults.scaleFactor / 2),
+                        y: midPoint.y
+                    };
                 }
 
                 let theta = Math.atan2(curveEnd.y - curveStart.y, curveEnd.x - curveStart.x) - Math.PI / 2;
@@ -129,6 +123,62 @@ async function positionNodes(grid) {
                     x: midPoint.x + offset * Math.cos(theta),
                     y: midPoint.y + offset * Math.sin(theta)
                 };
+
+                //Special Case Adjustments
+                /*
+                * These adjustments ar ehacks to get overlapping routes to avoid one another, this should be possible to do
+                * using extra properties on the data
+                 */
+                if(d.start === 'strategyDiscussion' && d.end === 'cf'){
+                    curveStart = {
+                        x: curveStart.x - defaults.scaleFactor * 2,
+                        y: curveStart.y + defaults.scaleFactor * 2
+                    };
+
+                    curveEnd = {
+                        x: curveEnd.x - defaults.scaleFactor * 2,
+                        y: curveEnd.y + defaults.scaleFactor * 1.5
+                    };
+
+                    controlPoint = {
+                        x: controlPoint.x - defaults.scaleFactor * 2,
+                        y: controlPoint.y + defaults.scaleFactor * 1.6
+                    };
+                }
+
+                if(d.start === 'cf' && d.end === 'strategyDiscussion'){
+                    curveStart = {
+                        x: curveStart.x + defaults.scaleFactor * 3,
+                        y: curveStart.y - defaults.scaleFactor * 2
+                    };
+
+                    curveEnd = {
+                        x: curveEnd.x + defaults.scaleFactor,
+                        y: curveEnd.y - defaults.scaleFactor * 1.5
+                    };
+
+                    controlPoint = {
+                        x: controlPoint.x + defaults.scaleFactor * 2,
+                        y: controlPoint.y - defaults.scaleFactor * 1.6
+                    };
+                }
+
+                if(d.start === 'section47' && d.end === 'cf'){
+                    curveStart = {
+                        x: curveStart.x + defaults.scaleFactor * 4,
+                        y: curveStart.y
+                    };
+
+                    curveEnd = {
+                        x: curveEnd.x + defaults.scaleFactor * 2.5,
+                        y: curveEnd.y - defaults.scaleFactor
+                    };
+
+                    controlPoint = {
+                        x: controlPoint.x + defaults.scaleFactor * 3.8,
+                        y: controlPoint.y - defaults.scaleFactor * 0.4
+                    };
+                }
 
                 path += 'L' + curveStart.x + ',' + curveStart.y;
                 path += 'Q' + controlPoint.x + ',' + controlPoint.y + ',' + curveEnd.x + ',' + curveEnd.y;
