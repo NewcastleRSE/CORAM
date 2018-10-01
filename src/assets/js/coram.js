@@ -17,30 +17,52 @@ export default function Coram() {
     defaults = {
         width: stage.getBoundingClientRect().width,
         height: stage.getBoundingClientRect().height,
-        scaleFactor: Math.floor(stage.getBoundingClientRect().height / 35)
+        scaleFactor: Math.floor(stage.getBoundingClientRect().width / 50)
     };
 
-    if(orientation === 'portrait'){
-        defaults.scaleFactor = Math.floor(stage.getBoundingClientRect().width / 35)
-    }
-
     let grid = {
-        columnWidth: Math.floor(defaults.width / 13),
-        rowHeight: Math.floor(defaults.height / 10),
+        columnWidth: Math.floor(defaults.width / 15),
+        rowHeight: Math.floor(defaults.width / 15),
     };
 
     svg.attr('width', defaults.width);
     svg.attr('height', defaults.height);
 
-    svg.append('svg:defs').append('svg:marker')
-        .attr('id', 'arrow')
+    let defs = svg.append('svg:defs');
+
+    defs.append('svg:marker')
+        .attr('id', 'arrow-red')
         .attr('viewBox', '0 -15 30 30')
-        .attr('refX', 5)//so that it comes towards the center.
+        .attr('refX', 5)
         .attr('markerWidth', 5)
         .attr('markerHeight', 5)
         .attr('orient', 'auto')
         .append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5');
+        .attr('d', 'M0,-5L10,0L0,5')
+        .style('fill', 'red');
+
+    let gridLines = svg.append('g')
+        .attr('id', 'gridlines');
+
+    for(let x=0; x<=10; x++){
+        gridLines.append('line')
+            .attr('x1', 0)
+            .attr('y1', x*grid.rowHeight)
+            .attr('x2', 15*grid.rowHeight)
+            .attr('y2', x*grid.rowHeight)
+            .style('stroke', '#cccccc')
+            .style('stroke-width', 2);
+    }
+
+    for(let y=0; y<=15; y++){
+        gridLines.append('line')
+            .attr('x1', y*grid.columnWidth)
+            .attr('y1', 0)
+            .attr('x2', y*grid.columnWidth)
+            .attr('y2', 10*grid.rowHeight)
+            .style('stroke', '#cccccc')
+            .style('stroke-width', 2);
+    }
 
     positionNodes(grid);
 }
@@ -86,12 +108,12 @@ async function positionNodes(grid) {
                 end = _.find(nodeData, { 'id': d.end });
 
             let startPoint = {
-                    x: (start.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2),
-                    y: (start.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2)
+                    x: (start.col * grid.columnWidth) + (grid.columnWidth / 2),
+                    y: (start.row * grid.rowHeight) + (grid.rowHeight / 2)
                 },
                 endPoint = {
-                    x: (end.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2),
-                    y: (end.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2)
+                    x: (end.col * grid.columnWidth) + (grid.columnWidth / 2),
+                    y: (end.row * grid.rowHeight) + (grid.rowHeight / 2)
                 };
 
             let path = 'M' + startPoint.x + ',' + startPoint.y;
@@ -109,7 +131,7 @@ async function positionNodes(grid) {
 
                 let midPoint = {
                     x: startPoint.x + ((endPoint.x - startPoint.x) * d.junction.distance),
-                    y: (d.junction.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2)
+                    y: (d.junction.row * grid.rowHeight) + (grid.rowHeight / 2)
                 };
 
                 let curveStart,
@@ -167,7 +189,7 @@ async function positionNodes(grid) {
 
                     controlPoint = {
                         x: controlPoint.x - defaults.scaleFactor * 2,
-                        y: controlPoint.y + defaults.scaleFactor * 1.6
+                        y: controlPoint.y + defaults.scaleFactor * 1.5
                     };
                 }
 
@@ -242,29 +264,29 @@ async function positionNodes(grid) {
             d3.select(this).selectAll('line')
                 .data(node.exits)
                 .enter().append('line')
-                .attr('x1', function(d){ return (node.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) })
-                .attr('y1', function(d){ return (node.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) })
+                .attr('x1', function(d){ return (node.col * grid.columnWidth) + (grid.columnWidth / 2) })
+                .attr('y1', function(d){ return (node.row * grid.rowHeight) + (grid.rowHeight / 2) })
                 .attr('x2', function(d, i){
                     if(node.id === 'referral'){
-                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2));
                     }
                     else if(node.id === 'cf'){
-                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
                     }
                     else {
-                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2);
+                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i);
                     }
                 })
                 .attr('y2', function(d, i) {
 
                     if (node.id === 'referral') {
-                        return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
+                        return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
                     else if (node.id === 'cf') {
-                        return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
+                        return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
                     }
                     else {
-                        return ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+                        return ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2);
                     }
                 })
                 .attr('marker-end', 'url(#arrow)')
@@ -276,23 +298,41 @@ async function positionNodes(grid) {
                         d3.select('#' + node.id + '-exits').append('path')
                             .attr('d', function(d, i){
 
-                                let path = 'M';
+                                let path = 'M',
+                                    midpoint,
+                                    curveStart,
+                                    curveEnd;
 
                                 if(node.id === 'cf'){
-                                    path += (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2)) + (defaults.scaleFactor / 2) +
-                                    ',' + ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
+
+                                    midpoint = {
+                                        x: ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)),
+                                        y: ((node.row * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * (i+3)) / node.exits.length * 2))
+                                    };
+
+                                    path += ((node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * (i+3)) + (grid.columnWidth / 2))) +
+                                    ',' + (((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * (i+3)) / node.exits.length * 2));
                                 }
                                 else {
-                                    path += (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2) +
-                                        ',' + ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+
+                                    midpoint = {
+                                        x: ((node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i)),
+                                        y: ((closeNode.row * grid.rowHeight) + (grid.rowHeight / 2))
+                                    };
+
+                                    path += ((node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i)) +
+                                        ',' + (((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2));
                                 }
 
-                                path += 'L' + (closeNode.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) +
-                                    ',' + (closeNode.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+                                path += 'L' + midpoint.x + ',' + midpoint.y;
+
+                                path += 'L' + ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)) +
+                                    ',' + ((closeNode.row * grid.rowHeight) + (grid.rowHeight / 2));
 
                                 console.log(path);
                                 return path;
                             })
+                            .style('fill', 'none')
                             .style('stroke', function(d) { return closeNode.color; })
                             .style('stroke-dasharray', function() { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); })
                             .style('stroke-width', function() { return defaults.scaleFactor / 5 })
@@ -308,25 +348,25 @@ async function positionNodes(grid) {
                 .attr('dx', function(d, i){
 
                     if(node.id === 'referral'){
-                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2));
                     }
                     else if(node.id === 'cf'){
-                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2)) + (defaults.scaleFactor / 2);
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
                     }
                     else {
-                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i) + (defaults.scaleFactor / 2)
+                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i);
                     }
                 })
                 .attr('dy', function(d, i){
 
                     if (node.id === 'referral') {
-                        return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
+                        return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
                     else if (node.id === 'cf') {
-                        return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
+                        return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
                     }
                     else {
-                        return ((node.row + 2) * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2);
+                        return ((node.row + 2) * grid.rowHeight) + (grid.rowHeight / 2);
                     }
 
 
@@ -356,21 +396,30 @@ async function positionNodes(grid) {
         .attr('class', 'node');
 
     let circle = nodes.append('circle')
-        .attr('cx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) })
-        .attr('cy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 2) })
+        .attr('cx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) })
+        .attr('cy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) })
         .attr('r', defaults.scaleFactor)
         .style('fill', 'white')
         .style('stroke', function(d) { return d.color; })
         .style('stroke-dasharray', function(d) { if (d.universal) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); } })
         .style('stroke-width', function() { return defaults.scaleFactor / 5 });
 
+    let counter = nodes.append('text')
+        .text(function(d) { return d.universal ? '' : '0'; })
+        .attr('id', function(d) { return d.id + '-counter'; })
+        .attr('text-anchor', 'middle')
+        .attr('font-size', function() { return defaults.scaleFactor / 2 })
+        .attr('font-weight', 'bold')
+        .attr('dx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) })
+        .attr('dy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor / 5) });
+
     let label = nodes.append('text')
         .text(function(d) { return d.name })
         .attr('text-anchor', 'middle')
         .attr('font-size', function() { return defaults.scaleFactor / 2 })
         .attr('font-weight', 'bold')
-        .attr('dx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) + (defaults.scaleFactor / 2) })
-        .attr('dy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor * 2.2) });
+        .attr('dx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) })
+        .attr('dy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor * 1.75) });
 
     //nodeGroup.selectAll('g.node text').each(insertLinebreaks)
 }

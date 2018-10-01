@@ -3,7 +3,7 @@
     "id": "universalSupport",
     "name": "Universal Support",
     "color": "#CCA246",
-    "col": 0,
+    "col": 1,
     "row": 2,
     "universal": true,
     "exits": []
@@ -12,7 +12,7 @@
     "id": "earlyHelp",
     "name": "Early Help",
     "color": "#01AF51",
-    "col": 0,
+    "col": 1,
     "row": 4,
     "universal": false,
     "exits": [
@@ -30,7 +30,7 @@
     "id": "initialContact",
     "name": "Initial Contact",
     "color": "#000000",
-    "col": 2,
+    "col": 3,
     "row": 4,
     "universal": false,
     "exits": [
@@ -52,7 +52,7 @@
     "id": "referral",
     "name": "Referral",
     "color": "#000000",
-    "col": 4,
+    "col": 5,
     "row": 4,
     "universal": false,
     "exits": [
@@ -74,7 +74,7 @@
     "id": "strategyDiscussion",
     "name": "Strategy Discussion",
     "color": "#000000",
-    "col": 6,
+    "col": 7,
     "row": 6,
     "universal": false,
     "exits": [
@@ -92,7 +92,7 @@
     "id": "cf",
     "name": "C&F",
     "color": "#558ED5",
-    "col": 8,
+    "col": 9,
     "row": 2,
     "universal": false,
     "exits": [
@@ -118,7 +118,7 @@
     "id": "section47",
     "name": "Section 47",
     "color": "#558ED5",
-    "col": 8,
+    "col": 9,
     "row": 6,
     "universal": false,
     "exits": [
@@ -140,7 +140,7 @@
     "id": "icpc",
     "name": "ICPC",
     "color": "#558ED5",
-    "col": 10,
+    "col": 11,
     "row": 6,
     "universal": false,
     "exits": [
@@ -162,7 +162,7 @@
     "id": "closure",
     "name": "Closure",
     "color": "#558ED5",
-    "col": 12,
+    "col": 13,
     "row": 9,
     "universal": false,
     "exits": []
