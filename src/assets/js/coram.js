@@ -291,7 +291,7 @@ async function positionNodes(grid) {
                                     };
 
                                     path += ((node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i)) +
-                                        ',' + (((node.row + (defaults.scaleFactor/12.5)) * grid.rowHeight) + (grid.rowHeight / 2));
+                                        ',' + (((node.row + 2.1) * grid.rowHeight) + (grid.rowHeight / 2));
                                 }
 
                                 path += 'L' + midpoint.x + ',' + midpoint.y;
@@ -299,7 +299,6 @@ async function positionNodes(grid) {
                                 path += 'L' + ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)) +
                                     ',' + ((closeNode.row * grid.rowHeight) + (grid.rowHeight / 2));
 
-                                console.log(path);
                                 return path;
                             })
                             .style('fill', 'none')
