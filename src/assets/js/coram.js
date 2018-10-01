@@ -2,6 +2,7 @@
 
 import * as d3 from 'd3';
 import _ from 'lodash';
+import definitions from './definitions';
 
 let svg,
     stage,
@@ -28,18 +29,8 @@ export default function Coram() {
     svg.attr('width', defaults.width);
     svg.attr('height', defaults.height);
 
-    let defs = svg.append('svg:defs');
-
-    defs.append('svg:marker')
-        .attr('id', 'arrow-red')
-        .attr('viewBox', '0 -15 30 30')
-        .attr('refX', 5)
-        .attr('markerWidth', 5)
-        .attr('markerHeight', 5)
-        .attr('orient', 'auto')
-        .append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5')
-        .style('fill', 'red');
+    //builds reusable definitions for objects like arrow markers
+    definitions(svg);
 
     let gridLines = svg.append('g')
         .attr('id', 'gridlines');
@@ -65,22 +56,6 @@ export default function Coram() {
     }
 
     positionNodes(grid);
-}
-
-function insertLinebreaks(d) {
-
-    console.log(d);
-
-    let el = d3.select(this);
-    let words = d.name.split(' ');
-    el.text('');
-
-    for (let i = 0; i < words.length; i++) {
-        let tspan = el.append('tspan').text(words[i]);
-        tspan.attr('text-anchor', 'middle');
-        if (i > 0)
-            tspan.attr('dy', defaults.scaleFactor / 2);
-    }
 }
 
 async function positionNodes(grid) {
@@ -233,10 +208,6 @@ async function positionNodes(grid) {
 
             path += 'L' + endPoint.x + ',' + endPoint.y;
 
-            if(i===0){
-                console.log(path);
-            }
-
             return path;
         })
         .style('stroke', function(d) { return d.color; })
@@ -252,7 +223,6 @@ async function positionNodes(grid) {
     exitGroup.attr('id', 'exits');
 
     let closeNode = _.find(nodeData, {id: 'closure'});
-    console.log(closeNode);
 
     let exits = exitGroup.selectAll('.exits')
         .data(nodeData)
@@ -274,7 +244,7 @@ async function positionNodes(grid) {
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
                     }
                     else {
-                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i);
+                        return (node.col * grid.columnWidth) + ((grid.columnWidth / (node.exits.length-1)) * i);
                     }
                 })
                 .attr('y2', function(d, i) {
@@ -289,7 +259,7 @@ async function positionNodes(grid) {
                         return ((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2);
                     }
                 })
-                .attr('marker-end', 'url(#arrow)')
+                .attr('marker-end', function(d){ return 'url(#arrow-' + (d.color).replace('#','') + ')' })
                 .style('stroke', function(d) { return d.color; })
                 .style('stroke-dasharray', function(d) { return (defaults.scaleFactor/5) + ',' + (defaults.scaleFactor/5); })
                 .style('stroke-width', function() { return defaults.scaleFactor / 5 })
@@ -321,7 +291,7 @@ async function positionNodes(grid) {
                                     };
 
                                     path += ((node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i)) +
-                                        ',' + (((node.row + 1.8) * grid.rowHeight) + (grid.rowHeight / 2));
+                                        ',' + (((node.row + (defaults.scaleFactor/12.5)) * grid.rowHeight) + (grid.rowHeight / 2));
                                 }
 
                                 path += 'L' + midpoint.x + ',' + midpoint.y;
@@ -354,7 +324,7 @@ async function positionNodes(grid) {
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
                     }
                     else {
-                        return (node.col * grid.columnWidth) + (((grid.columnWidth / node.exits.length) * 1.5) * i);
+                        return (node.col * grid.columnWidth) + ((grid.columnWidth / (node.exits.length-1)) * i);
                     }
                 })
                 .attr('dy', function(d, i){
@@ -420,6 +390,4 @@ async function positionNodes(grid) {
         .attr('font-weight', 'bold')
         .attr('dx', function(d){ return (d.col * grid.columnWidth) + (grid.columnWidth / 2) })
         .attr('dy', function(d){ return (d.row * grid.rowHeight) + (grid.rowHeight / 2) + (defaults.scaleFactor * 1.75) });
-
-    //nodeGroup.selectAll('g.node text').each(insertLinebreaks)
 }
