@@ -3,6 +3,7 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
 import definitions from './definitions';
+import cases from './cases';
 
 let svg,
     stage,
@@ -32,7 +33,7 @@ export default function Coram() {
     //builds reusable definitions for objects like arrow markers
     definitions(svg);
 
-    let gridLines = svg.append('g')
+    /*let gridLines = svg.append('g')
         .attr('id', 'gridlines');
 
     for(let x=0; x<=10; x++){
@@ -53,9 +54,11 @@ export default function Coram() {
             .attr('y2', 10*grid.rowHeight)
             .style('stroke', '#cccccc')
             .style('stroke-width', 2);
-    }
+    }*/
 
-    positionNodes(grid);
+    positionNodes(grid).then(function () {
+        cases(svg, defaults);
+    })
 }
 
 async function positionNodes(grid) {
@@ -74,6 +77,7 @@ async function positionNodes(grid) {
         .data(routeData)
         .enter()
         .append('g')
+        .attr('id', function (d) { return d.start + '-to-' + d.end; })
         .attr('class', 'route');
 
     let route = routes.append('path')
@@ -91,7 +95,7 @@ async function positionNodes(grid) {
                     y: (end.row * grid.rowHeight) + (grid.rowHeight / 2)
                 };
 
-            let path = 'M' + startPoint.x + ',' + startPoint.y;
+            let path = 'M ' + startPoint.x + ',' + startPoint.y;
 
 
 
@@ -202,11 +206,11 @@ async function positionNodes(grid) {
                     };
                 }
 
-                path += 'L' + curveStart.x + ',' + curveStart.y;
-                path += 'Q' + controlPoint.x + ',' + controlPoint.y + ',' + curveEnd.x + ',' + curveEnd.y;
+                path += ' L ' + curveStart.x + ',' + curveStart.y;
+                path += ' Q ' + controlPoint.x + ',' + controlPoint.y + ',' + curveEnd.x + ',' + curveEnd.y;
             }
 
-            path += 'L' + endPoint.x + ',' + endPoint.y;
+            path += ' L ' + endPoint.x + ',' + endPoint.y;
 
             return path;
         })
@@ -268,7 +272,7 @@ async function positionNodes(grid) {
                         d3.select('#' + node.id + '-exits').append('path')
                             .attr('d', function(d, i){
 
-                                let path = 'M',
+                                let path = 'M ',
                                     midpoint,
                                     curveStart,
                                     curveEnd;
@@ -294,9 +298,9 @@ async function positionNodes(grid) {
                                         ',' + (((node.row + 2.1) * grid.rowHeight) + (grid.rowHeight / 2));
                                 }
 
-                                path += 'L' + midpoint.x + ',' + midpoint.y;
+                                path += ' L ' + midpoint.x + ',' + midpoint.y;
 
-                                path += 'L' + ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)) +
+                                path += ' L ' + ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)) +
                                     ',' + ((closeNode.row * grid.rowHeight) + (grid.rowHeight / 2));
 
                                 return path;
