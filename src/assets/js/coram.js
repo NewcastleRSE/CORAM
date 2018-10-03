@@ -30,10 +30,19 @@ export default function Coram() {
     svg.attr('width', defaults.width);
     svg.attr('height', defaults.height);
 
+    svg.append('g')
+        .attr('id', 'legend')
+        .append('text')
+        .attr('id', 'legend-date')
+        .attr('x',100)
+        .attr('y', 50)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', function() { return defaults.scaleFactor });
+
     //builds reusable definitions for objects like arrow markers
     definitions(svg);
 
-    /*let gridLines = svg.append('g')
+    let gridLines = svg.append('g')
         .attr('id', 'gridlines');
 
     for(let x=0; x<=10; x++){
@@ -54,7 +63,7 @@ export default function Coram() {
             .attr('y2', 10*grid.rowHeight)
             .style('stroke', '#cccccc')
             .style('stroke-width', 2);
-    }*/
+    }
 
     positionNodes(grid).then(function () {
         cases(svg, defaults);
@@ -101,13 +110,6 @@ async function positionNodes(grid) {
 
             if(d.junction){
 
-                //calculate full length of line and add mid-point at point d.bend.x
-                //invert changes the direction of the line by altering the mid-point y location
-                // let midPoint = {
-                //     x: startPoint.x + ((endPoint.x - startPoint.x) * (start.col/end.col)),
-                //     y: (start.row < end.row && start.col < end.col) ? startPoint.y : endPoint.y
-                // };
-
                 let midPoint = {
                     x: startPoint.x + ((endPoint.x - startPoint.x) * d.junction.distance),
                     y: (d.junction.row * grid.rowHeight) + (grid.rowHeight / 2)
@@ -152,10 +154,10 @@ async function positionNodes(grid) {
 
                 //Special Case Adjustments
                 /*
-                * These adjustments ar ehacks to get overlapping routes to avoid one another, this should be possible to do
+                * These adjustments are hacks to get overlapping routes to avoid one another, this should be possible to do
                 * using extra properties on the data
                  */
-                if(d.start === 'strategyDiscussion' && d.end === 'cf'){
+                if(d.start === 'strategy' && d.end === 'candf'){
                     curveStart = {
                         x: curveStart.x - defaults.scaleFactor * 2,
                         y: curveStart.y + defaults.scaleFactor * 2
@@ -172,7 +174,7 @@ async function positionNodes(grid) {
                     };
                 }
 
-                if(d.start === 'cf' && d.end === 'strategyDiscussion'){
+                if(d.start === 'candf' && d.end === 'strategy'){
                     curveStart = {
                         x: curveStart.x + defaults.scaleFactor * 3,
                         y: curveStart.y - defaults.scaleFactor * 2
@@ -189,7 +191,7 @@ async function positionNodes(grid) {
                     };
                 }
 
-                if(d.start === 'section47' && d.end === 'cf'){
+                if(d.start === 's47' && d.end === 'candf'){
                     curveStart = {
                         x: curveStart.x + defaults.scaleFactor * 4,
                         y: curveStart.y
@@ -238,13 +240,14 @@ async function positionNodes(grid) {
             d3.select(this).selectAll('line')
                 .data(node.exits)
                 .enter().append('line')
+                .attr('id', function (d) { return d.id; })
                 .attr('x1', function(d){ return (node.col * grid.columnWidth) + (grid.columnWidth / 2) })
                 .attr('y1', function(d){ return (node.row * grid.rowHeight) + (grid.rowHeight / 2) })
                 .attr('x2', function(d, i){
                     if(node.id === 'referral'){
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2));
                     }
-                    else if(node.id === 'cf'){
+                    else if(node.id === 'candf'){
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
                     }
                     else {
@@ -256,7 +259,7 @@ async function positionNodes(grid) {
                     if (node.id === 'referral') {
                         return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
-                    else if (node.id === 'cf') {
+                    else if (node.id === 'candf') {
                         return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
                     }
                     else {
@@ -277,7 +280,7 @@ async function positionNodes(grid) {
                                     curveStart,
                                     curveEnd;
 
-                                if(node.id === 'cf'){
+                                if(node.id === 'candf'){
 
                                     midpoint = {
                                         x: ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)),
@@ -323,7 +326,7 @@ async function positionNodes(grid) {
                     if(node.id === 'referral'){
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2));
                     }
-                    else if(node.id === 'cf'){
+                    else if(node.id === 'candf'){
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
                     }
                     else {
@@ -335,7 +338,7 @@ async function positionNodes(grid) {
                     if (node.id === 'referral') {
                         return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
-                    else if (node.id === 'cf') {
+                    else if (node.id === 'candf') {
                         return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * i) / node.exits.length * 2);
                     }
                     else {

@@ -6,12 +6,12 @@ html, body {
 }
 
 #route-map {
-  height: calc(100% - 100px);
-  width: calc(100% - 100px);
+  height: 100%;
+  width: 100%;
 }
 
 body {
-  margin: 50px;
+  margin: 0;
 }
 
 svg {
