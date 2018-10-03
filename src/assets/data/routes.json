@@ -1,7 +1,7 @@
 [
   {
-    "start": "universalSupport",
-    "end": "initialContact",
+    "start": "universal",
+    "end": "contact",
     "junction": {
       "row": 2,
       "distance": 0.5
@@ -10,14 +10,14 @@
     "universal": true
   },
   {
-    "start": "earlyHelp",
-    "end": "initialContact",
+    "start": "early",
+    "end": "contact",
     "junction": null,
     "color": "#01AF51",
     "universal": false
   },
   {
-    "start": "initialContact",
+    "start": "contact",
     "end": "referral",
     "junction": null,
     "color": "#000000",
@@ -25,7 +25,7 @@
   },
   {
     "start": "referral",
-    "end": "strategyDiscussion",
+    "end": "strategy",
     "junction": {
       "row": 6,
       "distance": 0.5
@@ -35,7 +35,7 @@
   },
   {
     "start": "referral",
-    "end": "cf",
+    "end": "candf",
     "junction": {
       "row": 2,
       "distance": 0.25
@@ -44,8 +44,8 @@
     "universal": false
   },
   {
-    "start": "strategyDiscussion",
-    "end": "cf",
+    "start": "strategy",
+    "end": "candf",
     "junction": {
       "row": 2,
       "distance": 0.75
@@ -54,8 +54,8 @@
     "universal": false
   },
   {
-    "start": "cf",
-    "end": "strategyDiscussion",
+    "start": "candf",
+    "end": "strategy",
     "junction": {
       "row": 6,
       "distance": 0.75
@@ -64,15 +64,15 @@
     "universal": false
   },
   {
-    "start": "strategyDiscussion",
-    "end": "section47",
+    "start": "strategy",
+    "end": "s47",
     "junction": null,
     "color": "#000000",
     "universal": false
   },
   {
-    "start": "section47",
-    "end": "cf",
+    "start": "s47",
+    "end": "candf",
     "junction": {
       "row": 3,
       "distance": 0.5
@@ -81,7 +81,7 @@
     "universal": false
   },
   {
-    "start": "section47",
+    "start": "s47",
     "end": "icpc",
     "junction": null,
     "color": "#558ED5",

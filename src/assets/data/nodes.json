@@ -1,6 +1,6 @@
 [
   {
-    "id": "universalSupport",
+    "id": "universal",
     "name": "Universal Support",
     "color": "#CCA246",
     "col": 1,
@@ -9,7 +9,7 @@
     "exits": []
   },
   {
-    "id": "earlyHelp",
+    "id": "early",
     "name": "Early Help",
     "color": "#01AF51",
     "col": 1,
@@ -27,7 +27,7 @@
     ]
   },
   {
-    "id": "initialContact",
+    "id": "contact",
     "name": "Initial Contact",
     "color": "#000000",
     "col": 3,
@@ -71,7 +71,7 @@
     ]
   },
   {
-    "id": "strategyDiscussion",
+    "id": "strategy",
     "name": "Strategy Discussion",
     "color": "#000000",
     "col": 7,
@@ -89,7 +89,7 @@
     ]
   },
   {
-    "id": "cf",
+    "id": "candf",
     "name": "C&F",
     "color": "#558ED5",
     "col": 9,
@@ -115,7 +115,7 @@
     ]
   },
   {
-    "id": "section47",
+    "id": "s47",
     "name": "Section 47",
     "color": "#558ED5",
     "col": 9,
