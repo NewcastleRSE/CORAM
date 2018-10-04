@@ -30,19 +30,10 @@ export default function Coram() {
     svg.attr('width', defaults.width);
     svg.attr('height', defaults.height);
 
-    svg.append('g')
-        .attr('id', 'legend')
-        .append('text')
-        .attr('id', 'legend-date')
-        .attr('x',100)
-        .attr('y', 50)
-        .attr('text-anchor', 'middle')
-        .attr('font-size', function() { return defaults.scaleFactor });
-
     //builds reusable definitions for objects like arrow markers
     definitions(svg);
 
-    let gridLines = svg.append('g')
+    /*let gridLines = svg.append('g')
         .attr('id', 'gridlines');
 
     for(let x=0; x<=10; x++){
@@ -63,7 +54,7 @@ export default function Coram() {
             .attr('y2', 10*grid.rowHeight)
             .style('stroke', '#cccccc')
             .style('stroke-width', 2);
-    }
+    }*/
 
     positionNodes(grid).then(function () {
         cases(svg, defaults);
@@ -244,8 +235,8 @@ async function positionNodes(grid) {
                 .attr('x1', function(d){ return (node.col * grid.columnWidth) + (grid.columnWidth / 2) })
                 .attr('y1', function(d){ return (node.row * grid.rowHeight) + (grid.rowHeight / 2) })
                 .attr('x2', function(d, i){
-                    if(node.id === 'referral'){
-                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2));
+                    if(node.id === 'referral' && d.name !== "NFA"){
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / (i/1.5)));
                     }
                     else if(node.id === 'candf'){
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
@@ -256,7 +247,8 @@ async function positionNodes(grid) {
                 })
                 .attr('y2', function(d, i) {
 
-                    if (node.id === 'referral') {
+                    if (node.id === 'referral' && d.name !== "NFA") {
+                        console.log(d);
                         return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
                     else if (node.id === 'candf') {
@@ -284,11 +276,11 @@ async function positionNodes(grid) {
 
                                     midpoint = {
                                         x: ((closeNode.col * grid.columnWidth) + (grid.columnWidth / 2)),
-                                        y: ((node.row * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * (i+3)) / node.exits.length * 2))
+                                        y: ((node.row * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * (i+5)) / node.exits.length * 2))
                                     };
 
-                                    path += ((node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * (i+3)) + (grid.columnWidth / 2))) +
-                                    ',' + (((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * (i+3)) / node.exits.length * 2));
+                                    path += ((node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * (i+5)) + (grid.columnWidth / 2))) +
+                                    ',' + (((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) + ((grid.rowHeight * (i+5)) / node.exits.length * 2));
                                 }
                                 else {
 
@@ -323,8 +315,8 @@ async function positionNodes(grid) {
                 .attr('font-size', function() { return defaults.scaleFactor / 2.5 })
                 .attr('dx', function(d, i){
 
-                    if(node.id === 'referral'){
-                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / 2));
+                    if(node.id === 'referral' && d.name !== "NFA"){
+                        return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) - (grid.columnWidth / (i/1.5)));
                     }
                     else if(node.id === 'candf'){
                         return (node.col * grid.columnWidth) + ((((grid.columnWidth / node.exits.length) * 1.5) * i) + (grid.columnWidth / 2));
@@ -335,7 +327,7 @@ async function positionNodes(grid) {
                 })
                 .attr('dy', function(d, i){
 
-                    if (node.id === 'referral') {
+                    if (node.id === 'referral' && d.name !== "NFA") {
                         return ((node.row - 1.9) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
                     else if (node.id === 'candf') {
@@ -383,6 +375,7 @@ async function positionNodes(grid) {
     let counter = nodes.append('text')
         .text(function(d) { return d.universal ? '' : '0'; })
         .attr('id', function(d) { return d.id + '-counter'; })
+        .attr('class', 'node-counter')
         .attr('text-anchor', 'middle')
         .attr('font-size', function() { return defaults.scaleFactor / 2 })
         .attr('font-weight', 'bold')

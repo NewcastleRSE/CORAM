@@ -37,7 +37,7 @@
     "universal": false,
     "exits": [
       {
-        "id": "contact-to-exit_nfa_iag",
+        "id": "contact-to-exit_nonsocialcare",
         "name": "NFA/IAG",
         "color": "#CCA246"
       },
@@ -61,6 +61,11 @@
     "row": 4,
     "universal": false,
     "exits": [
+      {
+        "id": "referral-to-exit_nonsocialcare",
+        "name": "NFA",
+        "color": "#CCA246"
+      },
       {
         "id": "referral-to-exit_cp",
         "name": "CP from OLA",
@@ -87,7 +92,7 @@
     "universal": false,
     "exits": [
       {
-        "id": "strategy-to-exit_nfa",
+        "id": "strategy-to-exit_nonsocialcare",
         "name": "NFA",
         "color": "#CCA246"
       },
@@ -112,6 +117,16 @@
         "color": "#01AF51"
       },
       {
+        "id": "candf-to-exit_legal",
+        "name": "Legal",
+        "color": "#EB3323"
+      },
+      {
+        "id": "candf-to-exit_lac",
+        "name": "LAC",
+        "color": "#000000"
+      },
+      {
         "id": "candf-to-exit_cin",
         "name": "CIN",
         "color": "#F19FCA"
@@ -122,7 +137,7 @@
         "color": "#FCF452"
       },
       {
-        "id": "candf-to-exit_nfa",
+        "id": "candf-to-exit_nonsocialcare",
         "name": "NFA",
         "color": "#CCA246"
       }
@@ -137,7 +152,7 @@
     "universal": false,
     "exits": [
       {
-        "id": "s47-to-exit_nfa",
+        "id": "s47-to-exit_nonsocialcare",
         "name": "NFA",
         "color": "#CCA246"
       },
@@ -145,6 +160,11 @@
         "id": "s47-to-exit_cin",
         "name": "CIN",
         "color": "#F19FCA"
+      },
+      {
+        "id": "s47-to-exit_legal",
+        "name": "Legal",
+        "color": "#EB3323"
       },
       {
         "id": "s47-to-exit_other",
@@ -162,7 +182,7 @@
     "universal": false,
     "exits": [
       {
-        "id": "icpc-to-exit_nfa",
+        "id": "icpc-to-exit_nonsocialcare",
         "name": "NFA",
         "color": "#CCA246"
       },
@@ -175,6 +195,11 @@
         "id": "icpc-to-exit_cp",
         "name": "CP",
         "color": "#EB3323"
+      },
+      {
+        "id": "icpc-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
       }
     ]
   },

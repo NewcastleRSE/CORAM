@@ -2,12 +2,15 @@
 
 import * as d3 from 'd3';
 import _ from 'lodash';
-import Moment from 'moment';
+import * as $ from 'jquery';
 
 let interval = 1000,
-    defaults = {};
+    defaults = {},
+    StopException = {},
+    PauseException = {};
 
 let transition = function (marker, path, exit) {
+
     marker.transition()
         .duration(interval)
         .attrTween('transform', translateAlong(path.node()))
@@ -35,107 +38,161 @@ export default function Cases(svg, svgDefaults) {
     let day = 0,
         caseGroup = svg.select('#cases'),
         legend = {
-            date: svg.select('#legend-date')
+            date: svg.select('#legend-date'),
+            cases: svg.select('#legend-cases')
         };
 
     d3.csv('/assets/data/cases.csv').then(function(caseData){
 
-        let cases = _.filter(caseData, {'child_id': '1000000'});
-
-        console.log(cases);
-
         let dates = _.uniq(_.map(caseData, 'date')),
             totalDays = dates.length,
             startDate = dates[0],
-            endDate = dates[dates.length-1];
+            stopLoop = false,
+            pauseLoop = false;
+
+        $('#case-count').text(0);
+        $('#current-date').text(startDate);
 
         function newDay() {
 
-            legend.date.text(dates[day]);
-
             //get all the case events for this day
-            let events = _.filter(cases, {date: dates[day]});
+            let events = _.filter(caseData, {date: dates[day]});
 
-            events.forEach(function(event){
+            try {
+                events.forEach(function(event){
 
-                let childMarker = caseGroup.select('#child-' + event.child_id);
+                    if(stopLoop){
+                        throw StopException;
+                    }
 
-                if(childMarker.empty()){
+                    if(pauseLoop) {
+                        throw PauseException;
+                    }
 
-                    let startNode = svg.select('#nodes #' + event.node + ' circle');
+                    let childMarker = caseGroup.select('#child-' + event.child_id + '-path-' + event.path_id);
 
-                    childMarker = caseGroup.append('circle')
-                        .attr('id', 'child-' + event.child_id)
-                        .attr('r', 10)
-                        .style('fill', 'white')
-                        .style('stroke', 'black')
-                        .style('stroke-width', 2)
-                        .attr('data-node', event.node)
-                        .attr('transform', 'translate(' + startNode.attr('cx') + ',' + startNode.attr('cy') + ')');
+                    if(childMarker.empty()){
 
-                    let nextNodeCases = parseInt(svg.select('#' + event.node + '-counter').text());
-                    svg.select('#' + event.node + '-counter').text(nextNodeCases+1);
-                }
-                else {
+                        let startNode = svg.select('#nodes #' + event.node + ' circle');
 
-                    let selector = '#' + childMarker.attr('data-node') + '-to-' + event.node,
-                        exit = true;
-
-                    let currentNodeCases = parseInt(svg.select('#' + childMarker.attr('data-node') + '-counter').text());
-                    svg.select('#' + childMarker.attr('data-node') + '-counter').text(currentNodeCases-1);
-
-                    if(!event.node.includes('exit')){
-                        selector += ' path';
-                        exit = false;
+                        childMarker = caseGroup.append('circle')
+                            .attr('id', 'child-' + event.child_id + '-path-' + event.path_id)
+                            .attr('class', 'case')
+                            .attr('r', 10)
+                            .style('fill', 'white')
+                            .style('stroke', 'black')
+                            .style('stroke-width', 2)
+                            .attr('data-node', event.node)
+                            .attr('transform', 'translate(' + startNode.attr('cx') + ',' + startNode.attr('cy') + ')');
 
                         let nextNodeCases = parseInt(svg.select('#' + event.node + '-counter').text());
                         svg.select('#' + event.node + '-counter').text(nextNodeCases+1);
                     }
+                    else {
 
-                    let transitionPath = svg.select(selector);
+                        let selector = '#' + childMarker.attr('data-node') + '-to-' + event.node,
+                            exit = true;
 
-                    childMarker.attr('data-node', event.node);
+                        let currentNodeCases = parseInt(svg.select('#' + childMarker.attr('data-node') + '-counter').text());
+                        svg.select('#' + childMarker.attr('data-node') + '-counter').text(currentNodeCases-1);
 
-                    transition(childMarker, transitionPath, exit);
+                        if(!event.node.includes('exit')){
+                            selector += ' path';
+                            exit = false;
+
+                            let nextNodeCases = parseInt(svg.select('#' + event.node + '-counter').text());
+                            svg.select('#' + event.node + '-counter').text(nextNodeCases+1);
+                        }
+
+                        let transitionPath = svg.select(selector);
+
+                        childMarker.attr('data-node', event.node);
+
+                        //debug for exits in data that aren't in the original diagram
+                        // if(!transitionPath.node()){
+                        //     console.log(_.filter(caseData, {'child_id': event.child_id, 'path_id': event.path_id}));
+                        //     console.log(selector);
+                        // }
+
+                        transition(childMarker, transitionPath, exit);
+                    }
+
+                });
+
+                if (day < totalDays) {
+
+                    //legend.date.text(dates[day]);
+                    //legend.cases.text(d3.selectAll('.case').size() + ' Cases');
+
+                    $('#case-count').text(d3.selectAll('.case').size());
+                    $('#current-date').text(dates[day]);
+
+                    day++;
+                    d3.timeout(newDay, interval)
+                } else {
+                    return true;
                 }
+            }
+            catch(ex) {
+                if(ex === StopException) {
+                    day = 0;
+                    startDate = dates[0];
+                    $('#control-play').css('display', 'block');
+                    $('#control-pause').css('display', 'none');
 
-            });
+                    $('#case-count').text(0);
+                    $('#current-date').text(startDate);
 
-            if (day < totalDays) {
-                day++;
-                d3.timeout(newDay, interval)
-            } else {
-                return true;
+                    svg.selectAll('#cases .case').remove();
+                    svg.selectAll('#nodes .node-counter').text('0');
+
+                    stopLoop = false;
+                    pauseLoop = false;
+                }
+                else if(ex === PauseException) {
+                    $('#control-play').css('display', 'block');
+                    $('#control-pause').css('display', 'none');
+
+                    stopLoop = false;
+                    pauseLoop = true;
+                }
+                else {
+                    throw ex;
+                }
             }
         }
 
-        newDay();
+        $('#speed').on('input change', function() {
+            //take from 2100 so that the fastest it will go is 100 milliseconds per day
+            interval = 2100 - ($(this).val());
+        });
+
+        $('#control-play').click(function(){
+            $('#control-play').css('display', 'none');
+            $('#control-pause').css('display', 'block');
+            pauseLoop = false;
+            newDay();
+        });
+
+        $('#control-pause').click(function(){
+            pauseLoop = true;
+        });
+
+        $('#control-stop').click(function(){
+            stopLoop = true;
+
+            if(pauseLoop){
+                day = 0;
+                startDate = dates[0];
+                $('#control-play').css('display', 'block');
+                $('#control-pause').css('display', 'none');
+
+                $('#case-count').text(0);
+                $('#current-date').text(startDate);
+
+                stopLoop = false;
+                pauseLoop = false;
+            }
+        });
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
