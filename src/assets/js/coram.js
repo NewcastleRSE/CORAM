@@ -14,7 +14,7 @@ export default function Coram() {
 
     svg = d3.select('#route-map').append('svg');
     stage = d3.select('#route-map').node();
-    orientation = stage.getBoundingClientRect().width > stage.getBoundingClientRect().height ? 'landscape' : 'portrait';
+    orientation = stage.getBoundingClientRect().width < (stage.getBoundingClientRect().height * 1.5) ? 'landscape' : 'portrait';
 
     defaults = {
         width: stage.getBoundingClientRect().width,
@@ -23,8 +23,8 @@ export default function Coram() {
     };
 
     let grid = {
-        columnWidth: Math.floor(defaults.width / 15),
-        rowHeight: Math.floor(defaults.width / 15),
+        columnWidth: orientation === 'landscape' ? Math.floor(defaults.width / 15) : Math.floor(defaults.height / 10),
+        rowHeight: orientation === 'landscape' ? Math.floor(defaults.width / 15) : Math.floor(defaults.height / 10),
     };
 
     svg.attr('width', defaults.width);
