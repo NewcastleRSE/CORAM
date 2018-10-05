@@ -1,5 +1,7 @@
 /* SASS */
 
+@import url('https://fonts.googleapis.com/css?family=K2D');
+
 html, body {
   height: 100%;
   width: 100%;
@@ -13,6 +15,7 @@ html, body {
 body {
   margin: 0;
   position: relative;
+  font-family: 'K2D', sans-serif;
 }
 
 .control-panel {
@@ -98,5 +101,99 @@ body {
 svg {
   .node {
     z-index: 10;
+  }
+}
+
+/*
+* Overrides for HTML5 Range control
+ */
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+
+  &:focus {
+    outline: none;
+  }
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+    background: darkcyan;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+  }
+  &::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 25px;
+    width: 10px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -10px;
+  }
+  &:focus::-webkit-slider-runnable-track {
+    background: darkcyan;
+  }
+  &::-moz-range-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+    background: darkcyan;
+    border-radius: 1.3px;
+    border: none;
+  }
+  &::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 25px;
+    width: 10px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  &::-ms-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    border-width: 16px 0;
+    color: transparent;
+  }
+  &::-ms-fill-lower {
+    background: darkcyan;
+    border: none;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+  }
+  &::-ms-fill-upper {
+    background: darkcyan;
+    border: none;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+  }
+  &::-ms-thumb {
+    box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 25px;
+    width: 10px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  &:focus::-ms-fill-lower {
+    background: darkcyan;
+  }
+  &:focus::-ms-fill-upper {
+    background: darkcyan;
   }
 }
