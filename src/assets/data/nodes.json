@@ -1,58 +1,215 @@
 [
   {
-    "id": "earlyHelp",
-    "name": "Early Help",
-    "color": "#01AF51",
-    "col": 0,
-    "row": 1
+    "id": "universal",
+    "name": "Universal Support",
+    "color": "#CCA246",
+    "col": 1,
+    "row": 2,
+    "universal": true,
+    "exits": []
   },
   {
-    "id": "initialContact",
+    "id": "early",
+    "name": "Early Help",
+    "color": "#01AF51",
+    "col": 1,
+    "row": 4,
+    "universal": false,
+    "exits": [
+      {
+        "id": "early-to-exit_universal",
+        "name": "Universal",
+        "color": "#CCA246"
+      },
+      {
+        "id": "early-to-exit_targeted",
+        "name": "Targeted",
+        "color": "#01AF51"
+      }
+    ]
+  },
+  {
+    "id": "contact",
     "name": "Initial Contact",
     "color": "#000000",
-    "col": 1,
-    "row": 1
+    "col": 3,
+    "row": 4,
+    "universal": false,
+    "exits": [
+      {
+        "id": "contact-to-exit_nonsocialcare",
+        "name": "NFA/IAG",
+        "color": "#CCA246"
+      },
+      {
+        "id": "contact-to-exit_eh",
+        "name": "EH",
+        "color": "#01AF51"
+      },
+      {
+        "id": "contact-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "referral",
     "name": "Referral",
     "color": "#000000",
-    "col": 2,
-    "row": 1
+    "col": 5,
+    "row": 4,
+    "universal": false,
+    "exits": [
+      {
+        "id": "referral-to-exit_nonsocialcare",
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "id": "referral-to-exit_cp",
+        "name": "CP from OLA",
+        "color": "#EB3323"
+      },
+      {
+        "id": "referral-to-exit_lac",
+        "name": "LAC",
+        "color": "#000000"
+      },
+      {
+        "id": "referral-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
-    "id": "strategyDiscussion",
+    "id": "strategy",
     "name": "Strategy Discussion",
     "color": "#000000",
-    "col": 3,
-    "row": 2
+    "col": 7,
+    "row": 6,
+    "universal": false,
+    "exits": [
+      {
+        "id": "strategy-to-exit_nonsocialcare",
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "id": "strategy-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
-    "id": "cf",
-    "name": "C & F",
+    "id": "candf",
+    "name": "C&F",
     "color": "#558ED5",
-    "col": 4,
-    "row": 0
+    "col": 9,
+    "row": 2,
+    "universal": false,
+    "exits": [
+      {
+        "id": "candf-to-exit_eh",
+        "name": "EH",
+        "color": "#01AF51"
+      },
+      {
+        "id": "candf-to-exit_legal",
+        "name": "Legal",
+        "color": "#EB3323"
+      },
+      {
+        "id": "candf-to-exit_lac",
+        "name": "LAC",
+        "color": "#000000"
+      },
+      {
+        "id": "candf-to-exit_cin",
+        "name": "CIN",
+        "color": "#F19FCA"
+      },
+      {
+        "id": "candf-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
+      },
+      {
+        "id": "candf-to-exit_nonsocialcare",
+        "name": "NFA",
+        "color": "#CCA246"
+      }
+    ]
   },
   {
-    "id": "section47",
+    "id": "s47",
     "name": "Section 47",
     "color": "#558ED5",
-    "col": 4,
-    "row": 2
+    "col": 9,
+    "row": 6,
+    "universal": false,
+    "exits": [
+      {
+        "id": "s47-to-exit_nonsocialcare",
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "id": "s47-to-exit_cin",
+        "name": "CIN",
+        "color": "#F19FCA"
+      },
+      {
+        "id": "s47-to-exit_legal",
+        "name": "Legal",
+        "color": "#EB3323"
+      },
+      {
+        "id": "s47-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "icpc",
     "name": "ICPC",
     "color": "#558ED5",
-    "col": 5,
-    "row": 2
+    "col": 11,
+    "row": 6,
+    "universal": false,
+    "exits": [
+      {
+        "id": "icpc-to-exit_nonsocialcare",
+        "name": "NFA",
+        "color": "#CCA246"
+      },
+      {
+        "id": "icpc-to-exit_cin",
+        "name": "CIN",
+        "color": "#F19FCA"
+      },
+      {
+        "id": "icpc-to-exit_cp",
+        "name": "CP",
+        "color": "#EB3323"
+      },
+      {
+        "id": "icpc-to-exit_other",
+        "name": "Other",
+        "color": "#FCF452"
+      }
+    ]
   },
   {
     "id": "closure",
     "name": "Closure",
     "color": "#558ED5",
-    "col": 6,
-    "row": 3
+    "col": 13,
+    "row": 9,
+    "universal": false,
+    "exits": []
   }
 ]

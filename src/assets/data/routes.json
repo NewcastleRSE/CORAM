@@ -1,47 +1,90 @@
 [
   {
-    "start": "earlyHelp",
-    "end": "initialContact",
-    "color": "#01AF51"
+    "start": "universal",
+    "end": "contact",
+    "junction": {
+      "row": 2,
+      "distance": 0.5
+    },
+    "color": "#CCA246",
+    "universal": true
   },
   {
-    "start": "initialContact",
+    "start": "early",
+    "end": "contact",
+    "junction": null,
+    "color": "#01AF51",
+    "universal": false
+  },
+  {
+    "start": "contact",
     "end": "referral",
-    "color": "#000000"
+    "junction": null,
+    "color": "#000000",
+    "universal": false
   },
   {
     "start": "referral",
-    "end": "strategyDiscussion",
-    "color": "#000000"
+    "end": "strategy",
+    "junction": {
+      "row": 6,
+      "distance": 0.5
+    },
+    "color": "#000000",
+    "universal": false
   },
   {
     "start": "referral",
-    "end": "cf",
-    "color": "#000000"
+    "end": "candf",
+    "junction": {
+      "row": 2,
+      "distance": 0.25
+    },
+    "color": "#000000",
+    "universal": false
   },
   {
-    "start": "strategyDiscussion",
-    "end": "cf",
-    "color": "#000000"
+    "start": "strategy",
+    "end": "candf",
+    "junction": {
+      "row": 2,
+      "distance": 0.75
+    },
+    "color": "#000000",
+    "universal": false
   },
   {
-    "start": "cf",
-    "end": "strategyDiscussion",
-    "color": "#558ED5"
+    "start": "candf",
+    "end": "strategy",
+    "junction": {
+      "row": 6,
+      "distance": 0.75
+    },
+    "color": "#558ED5",
+    "universal": false
   },
   {
-    "start": "strategyDiscussion",
-    "end": "section47",
-    "color": "#000000"
+    "start": "strategy",
+    "end": "s47",
+    "junction": null,
+    "color": "#000000",
+    "universal": false
   },
   {
-    "start": "section47",
-    "end": "cf",
-    "color": "#558ED5"
+    "start": "s47",
+    "end": "candf",
+    "junction": {
+      "row": 3,
+      "distance": 0.5
+    },
+    "color": "#558ED5",
+    "universal": false
   },
   {
-    "start": "section47",
+    "start": "s47",
     "end": "icpc",
-    "color": "#558ED5"
+    "junction": null,
+    "color": "#558ED5",
+    "universal": false
   }
 ]

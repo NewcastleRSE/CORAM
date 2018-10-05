@@ -3,19 +3,10 @@
  */
 'use strict';
 
-//check the environment
-// if (process.env.NODE_ENV !== 'production') {
-//     console.log('Looks like we are in development mode!');
-// }
-
 // import CSS
-// import animate_css from 'animate.css/animate.min.css';
-import css from '../css/css.css';
 import scss from '../css/sass.scss';
 
 // import Js Plugins/Entities
-
-//ES6 Module
 import Coram from './coram'
 
 window.h5 = {
@@ -29,13 +20,7 @@ window.h5 = {
         return flag;
     },
     rootResize: function() {
-        //orientation portrait width=750px height=1334px / WeChat width=750px height=1206px 
         var wFsize;
-        //screen.width screen.height  bug !!!
-        // var wWidth = (screen.width > 0) ? (window.innerWidth >= screen.width || window.innerWidth == 0) ? screen.width :
-        //     window.innerWidth : window.innerWidth;
-        // var wHeight = (screen.height > 0) ? (window.innerHeight >= screen.height || window.innerHeight == 0) ?
-        //     screen.height : window.innerHeight : window.innerHeight;
         var wWidth = window.innerWidth;
         var wHeight = window.innerHeight;
         if (wWidth > wHeight) {
@@ -95,35 +80,10 @@ window.h5 = {
         return that;
     },
     init: function() {
-        var that = this;
-        that.cssInit().eventInit();
+        this.cssInit().eventInit();
     }
 };
 window.onload = function() {
     window.h5.init();
     Coram();
 };
-
-//Stats JavaScript Performance Monitor
-
-//import Stats from 'stats.js';
-//showStats();
-// function showStats() {
-//     var stats = new Stats();
-//     stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-//     var fs = document.createElement('div');
-//     fs.style.position = 'absolute';
-//     fs.style.left = 0;
-//     fs.style.top = 0;
-//     fs.style.zIndex = 999;
-//     fs.appendChild(stats.domElement);
-//     document.body.appendChild(fs);
-
-//     function animate() {
-//         stats.begin();
-//         // monitored code goes here
-//         stats.end();
-//         requestAnimationFrame(animate);
-//     }
-//     requestAnimationFrame(animate);
-// }

@@ -6,16 +6,45 @@
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>
-        coram
+        CORAM
     </title>
     <meta name="keywords" content="">
     <meta name="x5-fullscreen" content="false" />
     <meta name="x5-orientation" content="portrait" />
     <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <link href="/assets/img/favicon.ico" rel="shortcut icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+    <link rel="mask-icon" href="/assets/img/safari-pinned-tab.svg" color="#5bbad5">
 </head>
 
 <body>
+    <div class="control-panel">
+        <div class="case-counter">
+            <span id="case-count"></span>
+            <span id="case-count-label">Cases</span>
+        </div>
+        <div class="date">
+            <span id="current-date"></span>
+            <input type="range" id="speed" min="100" max="2000" value="1000" />
+        </div>
+        <div class="controls">
+            <div id="control-play-pause">
+                <div id="control-play">
+                    <i class="material-icons">play_arrow</i>
+                </div>
+                <div id="control-pause">
+                    <i class="material-icons">pause</i>
+                </div>
+            </div>
+            <div id="control-stop">
+                <i class="material-icons">stop</i>
+            </div>
+        </div>
+    </div>
+    <div id="route-map"></div>
 </body>
 
 </html>
