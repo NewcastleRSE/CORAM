@@ -248,7 +248,6 @@ async function positionNodes(grid) {
                 .attr('y2', function(d, i) {
 
                     if (node.id === 'referral' && d.name !== "NFA") {
-                        console.log(d);
                         return ((node.row - 1.8) * grid.rowHeight) + (grid.rowHeight / 2) - ((grid.rowHeight * (i/2.5)) / node.exits.length * 2);
                     }
                     else if (node.id === 'candf') {

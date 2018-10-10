@@ -3,16 +3,17 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
 import * as $ from 'jquery';
+import Moment from 'moment';
 
 let interval = 1000,
     defaults = {},
     StopException = {},
     PauseException = {};
 
-let transition = function (marker, path, exit) {
+let transition = function (marker, durtion, path, exit) {
 
     marker.transition()
-        .duration(interval)
+        .duration(interval * durtion)
         .attrTween('transform', translateAlong(path.node()))
         .on('end', function(){
             if(exit){
@@ -114,7 +115,15 @@ export default function Cases(svg, svgDefaults) {
                         //     console.log(selector);
                         // }
 
-                        transition(childMarker, transitionPath, exit);
+                        let nextStop = _.find(caseData, {child_id: event.child_id, path_id: event.path_id, node_N: (parseInt(event.node_N) + 1).toString()});
+                        let duration = 1;
+
+                        if(nextStop){
+                            duration = Moment(nextStop.date).diff(Moment(event.date), 'days');
+                            duration = duration === 0 ? 1 : duration
+                        }
+
+                        transition(childMarker, duration, transitionPath, exit);
                     }
 
                 });
