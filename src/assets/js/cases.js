@@ -152,6 +152,8 @@ export default function Cases(svg, svgDefaults) {
                     $('#case-count').text(0);
                     $('#current-date').text(startDate);
 
+                    //Call a new empty transition to kill any currently moving nodes
+                    svg.selectAll('#cases .case').transition();
                     svg.selectAll('#cases .case').remove();
                     svg.selectAll('#nodes .node-counter').text('0');
 
