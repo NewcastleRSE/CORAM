@@ -8,13 +8,16 @@ import Moment from 'moment';
 let interval = 1000,
     defaults = {},
     StopException = {},
-    PauseException = {};
+    PauseException = {},
+    pathDisplacementScale = 0.2; // Multiplier of transition days to get a displacement.
+                                 // FIXME [JG]: pathDisplacementScale should probably be in defaults?
+
 
 let transition = function (marker, durtion, path, exit) {
 
     marker.transition()
         .duration(interval * durtion)
-        .attrTween('transform', translateAlong(path.node()))
+        .attrTween('transform', translateAlong(path.node(), durtion))
         .on('end', function(){
             if(exit){
                 marker.remove();
@@ -22,12 +25,21 @@ let transition = function (marker, durtion, path, exit) {
         })
 };
 
-let translateAlong = function(path) {
-    let l = path.getTotalLength();
+let translateAlong = function(path, d) {
+    let l = path.getTotalLength(),
+        dx = pathDisplacementScale * ((Math.random() > 0.5) ? d : -d), 
+        dy = pathDisplacementScale * ((Math.random() > 0.5) ? d : -d);
+
+    // Interpolate along a triangle function (0, 0) - (0.5, 1.0) - (1.0, 0)
+    let triangle = function(t) {
+        return (t < 0.5) ? 2 * t : 2 * (1 - t);
+    }
+    
     return function(i) {
         return function(t) {
-            let p = path.getPointAtLength(t * l);
-            return 'translate(' + p.x + ',' + p.y + ')';//Move marker
+            let p = path.getPointAtLength(t * l),
+                displ = triangle(t);
+            return `translate(${p.x + dx * displ}, ${p.y + dy * displ})`; //Move marker
         }
     };
 };
@@ -79,10 +91,10 @@ export default function Cases(svg, svgDefaults) {
                         childMarker = caseGroup.append('circle')
                             .attr('id', 'child-' + event.child_id + '-path-' + event.path_id)
                             .attr('class', 'case')
-                            .attr('r', 10)
-                            .style('fill', 'white')
+                            .attr('r', 6)
+                            .style('fill', 'lightgreen')
                             .style('stroke', 'black')
-                            .style('stroke-width', 2)
+                            .style('stroke-width', 1)
                             .attr('data-node', event.node)
                             .attr('transform', 'translate(' + startNode.attr('cx') + ',' + startNode.attr('cy') + ')');
 
