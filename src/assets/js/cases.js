@@ -16,6 +16,7 @@ let interval = 1000,
 let transition = function (marker, durtion, path, exit) {
 
     marker.transition()
+        .ease(d3.easeLinear)
         .duration(interval * durtion)
         .attrTween('transform', translateAlong(path.node(), durtion))
         .on('end', function(){

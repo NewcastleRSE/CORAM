@@ -21,7 +21,7 @@ It is advised to use Docker as it provides a clean development environment away 
 1. Build the Dockerfile by running the build script at the root level using
 
     ```
-    docker-compose -f docker-compose-dev.yaml build
+    docker-compose -f docker-compose-dev.yaml build --no-cache
     ```
 
     This creates a Docker image tagged as `coram:latest`

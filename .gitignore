@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+.idea/coram.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+src/assets/.DS_Store
