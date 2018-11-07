@@ -1,4 +1,4 @@
-child_id,path_id,date,node,node_N,node_NN
+child_id,path_N,date,node,node_N,node_NN
 1000000,0,2015-01-01,contact,0,0
 1000001,0,2015-01-01,contact,0,0
 1000002,0,2015-01-01,contact,0,0
