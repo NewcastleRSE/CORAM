@@ -58,6 +58,9 @@ export default function Cases(svg, svgDefaults) {
 
     d3.csv('/assets/data/cases.csv').then(function(caseData){
 
+        //Colour scale for 0 to highest number of times an individual is seen by the system
+        var colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, _.maxBy(caseData, 'path_N').path_N]);
+
         let dates = _.uniq(_.map(caseData, 'date')),
             totalDays = dates.length,
             startDate = dates[0],
@@ -83,17 +86,17 @@ export default function Cases(svg, svgDefaults) {
                         throw PauseException;
                     }
 
-                    let childMarker = caseGroup.select('#child-' + event.child_id + '-path-' + event.path_id);
+                    let childMarker = caseGroup.select('#child-' + event.child_id + '-path-' + event.path_N);
 
                     if(childMarker.empty()){
 
                         let startNode = svg.select('#nodes #' + event.node + ' circle');
 
                         childMarker = caseGroup.append('circle')
-                            .attr('id', 'child-' + event.child_id + '-path-' + event.path_id)
+                            .attr('id', 'child-' + event.child_id + '-path-' + event.path_N)
                             .attr('class', 'case')
                             .attr('r', 6)
-                            .style('fill', 'lightgreen')
+                            .style('fill', colorScale(event.path_N))
                             .style('stroke', 'black')
                             .style('stroke-width', 1)
                             .attr('data-node', event.node)
@@ -124,11 +127,11 @@ export default function Cases(svg, svgDefaults) {
 
                         //debug for exits in data that aren't in the original diagram
                         // if(!transitionPath.node()){
-                        //     console.log(_.filter(caseData, {'child_id': event.child_id, 'path_id': event.path_id}));
+                        //     console.log(_.filter(caseData, {'child_id': event.child_id, 'path_N': event.path_N}));
                         //     console.log(selector);
                         // }
 
-                        let nextStop = _.find(caseData, {child_id: event.child_id, path_id: event.path_id, node_N: (parseInt(event.node_N) + 1).toString()});
+                        let nextStop = _.find(caseData, {child_id: event.child_id, path_N: event.path_N, node_N: (parseInt(event.node_N) + 1).toString()});
                         let duration = 1;
 
                         if(nextStop){
